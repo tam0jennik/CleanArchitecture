@@ -115,7 +115,7 @@ export class TodoComponent {
         this.listsClient.delete(this.selectedList.id).subscribe(
             () => {
                 this.deleteListModalRef.hide();
-                this.vm.lists = this.vm.lists.filter(t => t.id != this.selectedList.id)
+                this.vm.lists = this.vm.lists.filter(t => t.id != this.selectedList.id);
                 this.selectedList = this.vm.lists.length ? this.vm.lists[0] : null;
             },
             error => console.error(error)
@@ -138,7 +138,7 @@ export class TodoComponent {
             .subscribe(
                 () => {
                     if (this.selectedItem.listId != this.itemDetailsEditor.listId) {
-                        this.selectedList.items = this.selectedList.items.filter(i => i.id != this.selectedItem.id)
+                        this.selectedList.items = this.selectedList.items.filter(i => i.id != this.selectedItem.id);
                         let listIndex = this.vm.lists.findIndex(l => l.id == this.itemDetailsEditor.listId);
                         this.selectedItem.listId = this.itemDetailsEditor.listId;
                         this.vm.lists[listIndex].items.push(this.selectedItem);
@@ -175,10 +175,10 @@ export class TodoComponent {
     updateItem(item: TodoItemDto, pressedEnter: boolean = false): void {
         let isNewItem = item.id == 0;
 
-        if (!item.title.trim()) {
-            this.deleteItem(item);
-            return;
-        }
+        // if (!item.title.trim()) {
+        //     this.deleteItem(item);
+        //     return;
+        // }
 
         if (item.id == 0) {
             this.itemsClient.create(CreateTodoItemCommand.fromJS({ ...item, listId: this.selectedList.id }))
@@ -204,19 +204,19 @@ export class TodoComponent {
     }
 
     // Delete item
-    deleteItem(item: TodoItemDto) {
-        if (this.itemDetailsModalRef) {
-            this.itemDetailsModalRef.hide();
-        }
-
-        if (item.id == 0) {
-            let itemIndex = this.selectedList.items.indexOf(this.selectedItem);
-            this.selectedList.items.splice(itemIndex, 1);
-        } else {
-            this.itemsClient.delete(item.id).subscribe(
-                () => this.selectedList.items = this.selectedList.items.filter(t => t.id != item.id),
-                error => console.error(error)
-            );
-        }
-    }
+    // deleteItem(item: TodoItemDto) {
+    //     if (this.itemDetailsModalRef) {
+    //         this.itemDetailsModalRef.hide();
+    //     }
+    //
+    //     if (item.id == 0) {
+    //         let itemIndex = this.selectedList.items.indexOf(this.selectedItem);
+    //         this.selectedList.items.splice(itemIndex, 1);
+    //     } else {
+    //         this.itemsClient.delete(item.id).subscribe(
+    //             () => this.selectedList.items = this.selectedList.items.filter(t => t.id != item.id),
+    //             error => console.error(error)
+    //         );
+    //     }
+    // }
 }
