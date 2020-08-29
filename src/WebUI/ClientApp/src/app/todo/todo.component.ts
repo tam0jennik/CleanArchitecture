@@ -50,7 +50,7 @@ export class TodoComponent {
 
     showNewListModal(template: TemplateRef<any>): void {
         this.newListModalRef = this.modalService.show(template);
-        setTimeout(() => document.getElementById("title").focus(), 250);
+        setTimeout(() => document.getElementById('title').focus(), 250);
     }
 
     newListCancelled(): void {
@@ -59,7 +59,7 @@ export class TodoComponent {
     }
 
     addList(): void {
-        let list = TodoListDto.fromJS({
+        const list = TodoListDto.fromJS({
             id: 0,
             title: this.newListEditor.title,
             items: [],
@@ -74,13 +74,13 @@ export class TodoComponent {
                 this.newListEditor = {};
             },
             error => {
-                let errors = JSON.parse(error.response);
+                const errors = JSON.parse(error.response);
 
                 if (errors && errors.Title) {
                     this.newListEditor.error = errors.Title[0];
                 }
 
-                setTimeout(() => document.getElementById("title").focus(), 250);
+                setTimeout(() => document.getElementById('title').focus(), 250);
             }
         );
     }
@@ -115,7 +115,7 @@ export class TodoComponent {
         this.listsClient.delete(this.selectedList.id).subscribe(
             () => {
                 this.deleteListModalRef.hide();
-                this.vm.lists = this.vm.lists.filter(t => t.id != this.selectedList.id);
+                this.vm.lists = this.vm.lists.filter(t => t.id !== this.selectedList.id);
                 this.selectedList = this.vm.lists.length ? this.vm.lists[0] : null;
             },
             error => console.error(error)
@@ -137,9 +137,9 @@ export class TodoComponent {
         this.itemsClient.updateItemDetails(this.selectedItem.id, UpdateTodoItemDetailCommand.fromJS(this.itemDetailsEditor))
             .subscribe(
                 () => {
-                    if (this.selectedItem.listId != this.itemDetailsEditor.listId) {
-                        this.selectedList.items = this.selectedList.items.filter(i => i.id != this.selectedItem.id);
-                        let listIndex = this.vm.lists.findIndex(l => l.id == this.itemDetailsEditor.listId);
+                    if (this.selectedItem.listId !== this.itemDetailsEditor.listId) {
+                        this.selectedList.items = this.selectedList.items.filter(i => i.id !== this.selectedItem.id);
+                        const listIndex = this.vm.lists.findIndex(l => l.id === this.itemDetailsEditor.listId);
                         this.selectedItem.listId = this.itemDetailsEditor.listId;
                         this.vm.lists[listIndex].items.push(this.selectedItem);
                     }
@@ -154,7 +154,7 @@ export class TodoComponent {
     }
 
     addItem() {
-        let item = TodoItemDto.fromJS({
+        const item = TodoItemDto.fromJS({
             id: 0,
             listId: this.selectedList.id,
             priority: this.vm.priorityLevels[0].value,
@@ -163,7 +163,7 @@ export class TodoComponent {
         });
 
         this.selectedList.items.push(item);
-        let index = this.selectedList.items.length - 1;
+        const index = this.selectedList.items.length - 1;
         this.editItem(item, 'itemTitle' + index);
     }
 
@@ -173,14 +173,14 @@ export class TodoComponent {
     }
 
     updateItem(item: TodoItemDto, pressedEnter: boolean = false): void {
-        let isNewItem = item.id == 0;
+        const isNewItem = item.id === 0;
 
         // if (!item.title.trim()) {
         //     this.deleteItem(item);
         //     return;
         // }
 
-        if (item.id == 0) {
+        if (item.id === 0) {
             this.itemsClient.create(CreateTodoItemCommand.fromJS({ ...item, listId: this.selectedList.id }))
                 .subscribe(
                     result => {
